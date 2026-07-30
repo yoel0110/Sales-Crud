@@ -23,6 +23,8 @@ namespace Sales.Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
     }
