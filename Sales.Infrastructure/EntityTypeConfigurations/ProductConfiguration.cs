@@ -9,6 +9,9 @@ namespace Sales.Infrastructure.EntityTypeConfigurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder
+                .ToTable("Products");
+
+            builder
                 .HasKey(p => p.ProductId)
                 .HasName(name: "PK_Products")
                 .IsClustered();
