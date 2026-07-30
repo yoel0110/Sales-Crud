@@ -15,4 +15,7 @@ public  class Product
     public decimal Price { get; set; }
 
     public int Stock { get; set; }
+
+    public Category Category { get; set; }
+    public OrderDetail OrderDetail { get; set; }
 }

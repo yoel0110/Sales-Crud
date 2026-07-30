@@ -1,7 +1,4 @@
 ﻿
-using System;
-using System.Collections.Generic;
-
 namespace Sales.Domain.Entities;
 
 public  class City
@@ -11,4 +8,7 @@ public  class City
     public string CityName { get; set; }
 
     public int CountryId { get; set; }
+
+    public Country Country { get; set; }
+    public ICollection<Customer> Customers { get; set; }
 }
