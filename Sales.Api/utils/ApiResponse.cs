@@ -10,8 +10,7 @@
 
         private ApiResponse(){}
 
-
-        public static ApiResponse<T> SuccessFul(string message, int statusCode, T data)
+        public static ApiResponse<T> SuccessFul(int statusCode, T data, string message = "Ok")
         {
             return new ApiResponse<T>
             {
@@ -22,7 +21,7 @@
             };
         }
 
-        public static ApiResponse<T> Failure(string message, int statusCode)
+        public static ApiResponse<T> Failure(string message = "Error", int statusCode = 500)
         {
             return new ApiResponse<T>
             {
