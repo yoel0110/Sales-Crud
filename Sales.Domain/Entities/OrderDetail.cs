@@ -13,4 +13,6 @@ public  class OrderDetail
     public int Quantity { get; set; }
 
     public decimal TotalPrice { get; set; }
+
+    public ICollection<Product> Products { get; set; }
 }
