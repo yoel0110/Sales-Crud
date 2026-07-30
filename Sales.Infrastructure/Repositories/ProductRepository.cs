@@ -32,7 +32,7 @@ namespace Sales.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public IQueryable Query()
+        public IQueryable<Product> Query()
         {
             return _context.Products;
         }
