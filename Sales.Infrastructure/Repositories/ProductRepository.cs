@@ -1,4 +1,5 @@
-﻿using Sales.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Sales.Domain.Entities;
 using Sales.Infrastructure.Context;
 using Sales.Infrastructure.Interfaces.Repositories;
 
@@ -12,24 +13,27 @@ namespace Sales.Infrastructure.Repositories
             _context = context;
         }
 
-        public async void Add(Product product)
+        public async Task Add(Product product)
         {
             try
             {
+                var lastId = await  _context.Products.MaxAsync(p => (int?)p.ProductId) ?? 0;
+                Console.WriteLine(lastId);
+                product.ProductId = (int)lastId + 1;
                 _context.Products.Add(product);
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex}");
             }
         }
 
-        public async void Delete(Product product)
+        public async Task Delete(Product product)
         {
             product.Stock = 0;
             _context.Update(product);
-            await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
         }
 
         public IQueryable<Product> Query()
@@ -37,7 +41,7 @@ namespace Sales.Infrastructure.Repositories
             return _context.Products;
         }
 
-        public async void Update(Product product)
+        public async Task Update(Product product)
         {
             try
             {
