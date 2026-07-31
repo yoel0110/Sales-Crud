@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Sales.Application.Dtos;
 using Sales.Application.Interfaces;
 using Sales.Application.Types;
-using Sales.Infrastructure.Interfaces;
 using Sales.Infrastructure.Interfaces.Repositories;
+using Sales.Domain.Entities;
 
 namespace Sales.Application.Services
 {
@@ -14,6 +14,25 @@ namespace Sales.Application.Services
         public ProductService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
+        }
+
+        public async Task<Product> Update(ProductDto productDto)
+        {
+            var product = await _productRepository.Query()
+                                                    .Include(p => p.Category)
+                                                    .FirstOrDefaultAsync(
+                                                        p => p.ProductId == productDto.ProductId
+                                                    );
+            if (product != null)
+            {
+                product.ProductName = productDto.ProductName;
+                product.Price = productDto.Price;
+                product.Stock = productDto.Stock;
+                product.CategoryId = productDto.Category.Id;
+               
+               await _productRepository.Update(product);
+            }
+            return product;
         }
 
         public async Task<List<ProductDto>> GetProducts(decimal minPrice, decimal maxPrice, int length, decimal price,  string category = "Toys", FILTER filter = FILTER.LESS_THAN)
@@ -47,9 +66,37 @@ namespace Sales.Application.Services
                                     )
                                     .ToListAsync();
             return products;
-
         }
 
+        public async Task<Product> DeleteById(int id)
+        {
+            var product = await _productRepository.Query()
+                                                    .Include(p => p.Category)
+                                                    .FirstOrDefaultAsync(
+                                                        p => p.ProductId == id
+                                                    );
+            if(product.ProductName.Length > 0 && product.ProductId != 0)
+            {
+                await _productRepository.Delete(product);
+                return product;
+            }
+            return product;
+        }
 
+        public async Task<string> Create(ProductDto productDto)
+        {
+            var product = new Product
+            {
+                CategoryId = productDto.Category.Id,
+                Price = productDto.Price,
+                ProductName = productDto.ProductName,
+                Stock = productDto.Stock,
+                Category = null,
+                OrderDetail = null
+            };
+           await _productRepository.Add(product);
+
+            return $"{product.ProductId}";
+        }
     }
 }

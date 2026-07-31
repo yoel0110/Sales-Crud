@@ -23,5 +23,48 @@ namespace Sales.Api.Controllers
             return Ok(ApiResponse<List<ProductDto>>.SuccessFul(data: products));
         }
 
+        [HttpDelete("removeby")]
+        public async Task<ActionResult<ApiResponse<ProductDto>>> RemoveBy([FromQuery] int id)
+        {
+            var product  = await _productService.DeleteById(id);
+            var deleted = new ProductDto()
+            {
+                ProductId = product.ProductId,
+                Category = new CategoryDto
+                {
+                    Id = product.CategoryId,
+                    Name = product.Category.CategoryName
+                },
+                Price = product.Price,
+                ProductName = product.ProductName,
+                Stock = product.Stock
+            };
+            return Ok(ApiResponse<ProductDto>.SuccessFul(data: deleted, statusCode: 200));
+        }
+        [HttpPost("create")]
+        public async Task<ActionResult<ApiResponse<String>>> Add([FromBody] ProductDto product)
+        {
+            var id = await _productService.Create(product);
+            return Ok(ApiResponse<String>.SuccessFul(data: id, message: "Ok, created"));
+        }
+
+        [HttpPut("update")]
+        public async Task<ActionResult<ApiResponse<ProductDto>>> Update([FromBody] ProductDto product)
+        {
+            var updatedProduct = await _productService.Update(product);
+            var productDto = new ProductDto()
+            {
+                ProductId = updatedProduct.ProductId,
+                Category = new CategoryDto
+                {
+                    Id = updatedProduct.CategoryId,
+                    Name = updatedProduct.Category.CategoryName
+                },
+                Price = updatedProduct.Price,
+                ProductName = updatedProduct.ProductName,
+                Stock = updatedProduct.Stock
+            };
+            return Ok(ApiResponse<ProductDto>.SuccessFul(data: productDto, message: "Ok, updated"));
+        }
     }
 }
