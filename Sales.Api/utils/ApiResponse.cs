@@ -10,7 +10,7 @@
 
         private ApiResponse(){}
 
-        public static ApiResponse<T> SuccessFul(int statusCode, T data, string message = "Ok")
+        public static ApiResponse<T> SuccessFul( T data, int statusCode = 200, string message = "Ok")
         {
             return new ApiResponse<T>
             {

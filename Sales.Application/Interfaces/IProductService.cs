@@ -1,13 +1,14 @@
 ﻿using Sales.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Sales.Application.Types;
+
 
 namespace Sales.Application.Interfaces
 {
     public interface IProductService
     {
-        public Task<List<ProductDto>> GetProducts(int id = 0, decimal price = 0m, string category  = "Default");
+        public Task<List<ProductDto>> GetProducts(decimal minPrice, decimal maxPrice, int length = 0, decimal price = 0m, string category  = "Toys", FILTER filter = FILTER.LESS_THAN);
         
     }
 }
+
+
